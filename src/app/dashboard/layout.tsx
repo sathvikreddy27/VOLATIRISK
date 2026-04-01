@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut, Activity, BarChart2, LayoutDashboard } from "lucide-react";
+import { LogOut, Activity, BarChart2, LayoutDashboard, PieChart, BellRing, Settings } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +29,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const navLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Analyze", href: "/dashboard/analyze", icon: BarChart2 },
+    { name: "Portfolio", href: "/dashboard/portfolio", icon: PieChart },
+    { name: "Alerts", href: "/dashboard/alerts", icon: BellRing },
+    { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
 
   return (
@@ -63,8 +66,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                 )}
               >
-                <Icon size={20} className={isActive ? "animate-pulse" : ""} />
-                <span className="hidden sm:inline">{link.name}</span>
+                <div className="relative shrink-0">
+                  <Icon size={20} className={isActive ? "animate-pulse" : ""} />
+                </div>
+                <div className="hidden md:flex flex-1 items-center justify-between pointer-events-none">
+                  <span>{link.name}</span>
+                </div>
               </Link>
             );
           })}

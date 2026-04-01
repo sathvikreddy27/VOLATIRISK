@@ -18,6 +18,7 @@ interface StockResult {
 
 export default function AnalyzePage() {
   const [selectedSector, setSelectedSector] = useState<string>("IT");
+  const [noOfStocks, setNoOfStocks] = useState<number>(5);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<StockResult[]>([]);
   const [username, setUsername] = useState("");
@@ -51,19 +52,20 @@ export default function AnalyzePage() {
       const data = await res.json();
       
       if (data && data.data) {
-        setResults(data.data);
+        const topN = data.data.slice(0, noOfStocks);
+        setResults(topN);
         
         // Save to History
         if (username) {
-          const topStock = data.data.length > 0 ? {
-            ticker: data.data[0].ticker,
-            probability: data.data[0].probability,
-            direction: data.data[0].direction
+          const topStock = topN.length > 0 ? {
+            ticker: topN[0].ticker,
+            probability: topN[0].probability,
+            direction: topN[0].direction
           } : null;
           
           const newHistory = {
             sector: selectedSector,
-            count: data.data.length,
+            count: topN.length,
             date: new Date().toISOString(),
             topStock
           };
@@ -149,6 +151,36 @@ export default function AnalyzePage() {
               </div>
             </div>
           </div>
+
+          <div className="w-full md:w-56 space-y-2 flex flex-col justify-end">
+            <div className="flex justify-between items-center px-1 mb-8 md:mb-6">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                # Stocks
+              </label>
+            </div>
+            <div className="relative w-full h-8 flex items-center bg-slate-900/40 rounded-xl px-3 border border-white/5 shadow-inner">
+              {/* Dynamic thumb badge */}
+              <div 
+                className="absolute -top-10 -ml-3.5 w-7 h-7 flex items-center justify-center bg-emerald-500 text-white font-bold text-xs rounded-full shadow-[0_0_12px_rgba(16,185,129,0.8)] pointer-events-none transition-all duration-75 z-20"
+                style={{ 
+                  left: `calc(${((noOfStocks - 1) / (Math.max((SECTORS[selectedSector]?.length || 10) - 1, 1))) * 100}% + ${14 - (((noOfStocks - 1) / (Math.max((SECTORS[selectedSector]?.length || 10) - 1, 1))) * 28)}px)` 
+                }}
+              >
+                {noOfStocks}
+                {/* Little triangle pointer for the badge */}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-emerald-500 rotate-45" />
+              </div>
+              <input
+                type="range"
+                min="1"
+                max={SECTORS[selectedSector]?.length || 10}
+                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer custom-slider relative z-10"
+                value={noOfStocks}
+                onChange={(e) => setNoOfStocks(parseInt(e.target.value) || 1)}
+                disabled={loading}
+              />
+            </div>
+          </div>
           
           <motion.button
             whileHover={!loading ? { scale: 1.02 } : {}}
@@ -164,7 +196,7 @@ export default function AnalyzePage() {
             {loading ? (
               <><Activity size={20} className="animate-spin" /> Processing...</>
             ) : (
-              <><Activity size={20} /> Execute Model</>
+              <><Activity size={20} /> Analyze</>
             )}
           </motion.button>
         </div>

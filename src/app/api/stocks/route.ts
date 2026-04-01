@@ -8,25 +8,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid tickers array" }, { status: 400 });
     }
 
-    const results = [];
-
-    // Process array of tickers using raw fetch to Yahoo Finance to avoid lib issues
-    for (const ticker of tickers) {
+    // Process array of tickers concurrently using Promise.all to drastically reduce response time
+    const fetchPromises = tickers.map(async (ticker) => {
       try {
         const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1mo`;
         const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' } });
-        if (!res.ok) continue;
+        if (!res.ok) return null;
         
         const data = await res.json();
         const resultArr = data?.chart?.result;
-        if (!resultArr || resultArr.length === 0) continue;
+        if (!resultArr || resultArr.length === 0) return null;
         
         const quote = resultArr[0]?.indicators?.quote?.[0];
-        if (!quote || !quote.close) continue;
+        if (!quote || !quote.close) return null;
         
         // Filter out nulls
         const validCloses = quote.close.filter((c: number | null) => c !== null);
-        if (validCloses.length < 5) continue;
+        if (validCloses.length < 5) return null;
         
         const last6 = validCloses.slice(-6);
         const last5 = last6.slice(-5);
@@ -56,7 +54,7 @@ export async function POST(request: Request) {
         let finalScore = (0.5 * probability) + (0.3 * (100 - riskScore)) + (0.2 * volatility);
         finalScore = Math.max(0, Math.min(100, finalScore));
 
-        results.push({
+        return {
           ticker: ticker.replace(".NS", ""),
           rawTicker: ticker,
           latestPrice: latestPrice.toFixed(2),
@@ -65,14 +63,17 @@ export async function POST(request: Request) {
           volatility: Math.round(volatility),
           riskScore: Math.round(riskScore),
           finalScore: Math.round(finalScore)
-        });
-
+        };
       } catch (err) {
         console.error(`Failed to fetch ${ticker}:`, err);
+        return null;
       }
-    }
+    });
 
-    results.sort((a, b) => b.finalScore - a.finalScore);
+    const resultsRaw = await Promise.all(fetchPromises);
+    const results = resultsRaw.filter(Boolean); // remove nulls
+
+    results.sort((a: any, b: any) => b.finalScore - a.finalScore);
     return NextResponse.json({ data: results });
 
   } catch (error) {
