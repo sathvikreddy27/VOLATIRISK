@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { LogOut, Activity, BarChart2, LayoutDashboard, PieChart, BellRing, Settings } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -35,13 +36,13 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen relative flex bg-slate-950 text-slate-50">
+    <div className="min-h-screen relative flex bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-50">
       {/* Background gradients */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 -z-10" />
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 -z-10" />
       <div className="fixed inset-0 bg-[url('https://images.unsplash.com/photo-1620207418302-439b387441b0?q=80&w=2567&auto=format&fit=crop')] bg-cover bg-center opacity-5 mix-blend-screen pointer-events-none -z-10" />
 
       {/* Sidebar Navigation */}
-      <nav className="fixed bottom-0 w-full md:w-64 md:left-0 md:top-0 md:h-screen glass-panel z-50 flex flex-row md:flex-col border-t md:border-t-0 md:border-r border-white/5">
+      <nav className="fixed bottom-0 w-full md:w-64 md:left-0 md:top-0 md:h-screen bg-white/80 dark:bg-slate-900/50 backdrop-blur-md z-50 flex flex-row md:flex-col border-t md:border-t-0 md:border-r border-slate-200 dark:border-white/5">
         <div className="hidden md:flex items-center gap-3 p-6 mb-4">
           <div className="bg-blue-500/20 p-2 rounded-xl text-blue-400 border border-blue-500/20 shadow-inner">
             <Activity size={24} />
@@ -62,8 +63,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 className={cn(
                   "flex flex-col md:flex-row items-center gap-2 p-3 md:px-4 md:py-3.5 rounded-xl transition-all font-medium text-sm w-full",
                   isActive 
-                    ? "bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]" 
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                    ? "bg-blue-600/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]" 
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800/50"
                 )}
               >
                 <div className="relative shrink-0">
@@ -77,7 +78,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           })}
         </div>
         
-        <div className="hidden md:block mx-4 mt-auto mb-6 p-4 bg-slate-800/20 rounded-xl border border-white/5 shadow-inner">
+        <div className="hidden md:block mx-4 mt-auto mb-6 p-4 bg-slate-100 dark:bg-slate-800/20 rounded-xl border border-slate-200 dark:border-white/5 shadow-inner">
           <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Live Network Status</h4>
           <div className="space-y-3">
             <div className="flex justify-between items-center">
@@ -95,14 +96,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        <div className="hidden md:block p-4 border-t border-white/5">
+        <div className="hidden md:block p-4 border-t border-slate-200 dark:border-white/5">
           <div className="flex items-center justify-between px-2 mb-4">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Session</span>
-            <span className="text-xs font-bold text-white bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-white/5 truncate max-w-[120px]">{username}</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-white/5 truncate max-w-[120px]">{username}</span>
+          </div>
+          <div className="flex items-center gap-3 mb-4 px-2">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex-1">Theme</span>
+            <ThemeToggle />
           </div>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 p-3 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl transition-colors border border-rose-500/10 hover:border-rose-500/30 font-medium text-sm shadow-inner"
+            className="w-full flex items-center justify-center gap-2 p-3 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-xl transition-colors border border-rose-500/10 hover:border-rose-500/30 font-medium text-sm shadow-inner"
           >
             <LogOut size={16} /> Logout
           </button>
@@ -112,14 +117,17 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Main Content Area */}
       <main className="flex-1 md:ml-64 pb-20 md:pb-0 relative min-h-screen">
         {/* Mobile Header */}
-        <header className="md:hidden flex justify-between items-center p-4 glass-panel border-b border-white/5 sticky top-0 z-40 shadow-sm">
+        <header className="md:hidden flex justify-between items-center p-4 bg-white/80 dark:bg-slate-900/50 backdrop-blur-md border-b border-slate-200 dark:border-white/5 sticky top-0 z-40 shadow-sm">
            <div className="flex items-center gap-2">
-            <Activity size={20} className="text-blue-400" />
-            <h1 className="font-bold text-white tracking-tight">VolatiRisk</h1>
+            <Activity size={20} className="text-blue-600 dark:text-blue-400" />
+            <h1 className="font-bold text-slate-900 dark:text-white tracking-tight">VolatiRisk</h1>
           </div>
-          <button onClick={handleLogout} className="p-2 text-rose-400 bg-rose-500/10 rounded-lg border border-rose-500/20">
-            <LogOut size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button onClick={handleLogout} className="p-2 text-rose-600 dark:text-rose-400 bg-rose-500/10 rounded-lg border border-rose-500/20">
+              <LogOut size={18} />
+            </button>
+          </div>
         </header>
 
         {/* Dynamic Page Content */}

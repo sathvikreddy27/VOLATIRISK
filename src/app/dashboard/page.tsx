@@ -79,8 +79,8 @@ export default function DashboardHome() {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <header className="mb-10">
-        <h1 className="text-3xl font-black text-white mb-2 tracking-tight">Market Overview</h1>
-        <p className="text-slate-400 font-medium">Welcome to your dashboard. Get the latest insights before analyzing your sectors.</p>
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Market Overview</h1>
+        <p className="text-slate-600 dark:text-slate-400 font-medium">Welcome to your dashboard. Get the latest insights before analyzing your sectors.</p>
       </header>
 
       {/* Top Grid: Action & Watchlist */}
@@ -90,19 +90,19 @@ export default function DashboardHome() {
         <div className="lg:col-span-1 space-y-6">
           <motion.div 
             whileHover={{ scale: 1.02, translateY: -2 }}
-            className="glass-panel p-6 rounded-3xl relative overflow-hidden group cursor-pointer border border-blue-500/20 shadow-lg shadow-blue-900/10"
+            className="p-6 rounded-3xl relative overflow-hidden group cursor-pointer border border-blue-200 dark:border-blue-500/20 bg-white dark:bg-slate-800/40 shadow-lg shadow-blue-900/10"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl -mr-10 -mt-10" />
-            <h2 className="text-xl font-bold text-white mb-2">Ready to Analyze?</h2>
-            <p className="text-slate-400 text-sm mb-6 pr-4 leading-relaxed">Run the latest algorithm across major sectors to uncover hidden opportunities with VolatiRisk technology.</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Ready to Analyze?</h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 pr-4 leading-relaxed">Run the latest algorithm across major sectors to uncover hidden opportunities with VolatiRisk technology.</p>
             <Link href="/dashboard/analyze" className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-900/30 ring-1 ring-white/10">
               Start Analysis <ArrowRight size={18} />
             </Link>
           </motion.div>
 
-          <div className="glass-panel p-6 rounded-3xl border border-white/5 h-full">
-            <h3 className="font-bold text-white flex items-center gap-2 mb-5">
-              <Clock size={16} className="text-slate-400" /> Recent History
+          <div className="p-6 rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-slate-800/40 h-full">
+            <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-5">
+              <Clock size={16} className="text-slate-500 dark:text-slate-400" /> Recent History
             </h3>
             {history.length === 0 ? (
               <p className="text-sm text-slate-500 italic text-center py-8">No analysis history found.</p>
@@ -135,13 +135,13 @@ export default function DashboardHome() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Personal Watchlist */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-yellow-500/10">
+          <div className="p-6 sm:p-8 rounded-3xl border border-yellow-500/20 dark:border-yellow-500/10 bg-white dark:bg-slate-800/40">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold text-white flex items-center gap-2">
-                <Star size={18} className="text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] fill-yellow-400 opacity-90" /> 
+              <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Star size={18} className="text-yellow-500 dark:text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] fill-yellow-400 opacity-90" /> 
                 My Personal Watchlist
               </h3>
-              <span className="text-xs font-bold px-2 py-1 bg-slate-800 rounded-md text-slate-400 border border-white/5">{watchlist.length} saved</span>
+              <span className="text-xs font-bold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/5">{watchlist.length} saved</span>
             </div>
 
             {watchlist.length === 0 ? (
@@ -195,9 +195,9 @@ export default function DashboardHome() {
           </div>
 
           {/* Fintech News Widgets */}
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/5">
-            <h3 className="font-bold text-white flex items-center gap-2 mb-6">
-              <Newspaper size={18} className="text-blue-400" /> Live Market Intel
+          <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-white/5 bg-white dark:bg-slate-800/40">
+            <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-6">
+              <Newspaper size={18} className="text-blue-600 dark:text-blue-400" /> Live Market Intel
             </h3>
             {loadingNews ? (
                <div className="text-sm text-slate-500 animate-pulse text-center py-6">Connecting to Yahoo Finance...</div>
